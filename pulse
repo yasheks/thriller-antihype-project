@@ -1,0 +1,16 @@
+int PulseSensorPurplePin = 0;
+int LED7 = 7;
+
+int Signal;
+int Threshold = 550;
+
+
+void setup() {
+  pinMode(LED7, OUTPUT);
+  Serial.begin(9600);
+
+}
+
+void loop() {
+  Signal = analogRead(PulseSensorPurplePin);
+}
