@@ -10,15 +10,18 @@ constexpr uint8_t PIN_DB6 = 10;
 constexpr uint8_t PIN_DB7 = 11;
 
 LiquidCrystal lcd(PIN_RS, PIN_EN, PIN_DB4, PIN_DB5, PIN_DB6, PIN_DB7);
-int one = 1;
-int two = 1;
-int three = 1;
-int four = 1;
+int one = 0; // начинаем с 0 элемента
+int two = 0;
+int three = 0;
+int four = 0;
 
-int first[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-int second[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-int third[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-int foured[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+int first[] = {6, 6, 6, 7, 7, 7, 3, 3, 3, 1, 1, 1, 2, 2, 2, 4, 4, 4, 9, 9, 9, 8, 8, 8, 5, 5, 5, 0, 0, 0};
+
+int second[] ={2, 2, 2, 7, 7, 7, 1, 1, 1, 9, 9, 9, 5, 5, 5, 4, 4, 4, 0, 0, 0, 3, 3, 3, 8, 8, 8, 6, 6, 6};
+
+int third[] = {7, 7, 7, 1, 1, 1, 9, 9, 9, 8, 8, 8, 0, 0, 0, 5, 5, 5, 3, 3, 3, 4, 4, 4, 6, 6, 6, 2, 2, 2};
+
+int foured[] = {4, 4, 4, 7, 7, 7, 9, 9, 9, 8, 8, 8, 5, 5, 5, 2, 2, 2, 6, 6, 6, 0, 0, 0, 1, 1, 1, 3, 3, 3};
 
 int red_pin= 3;
 int green_pin = 4;
@@ -47,22 +50,18 @@ void loop() {
   bool button = !digitalRead(2);    
 
   if(button){
-      if(one == 0)
+      if(first[one] == 1)
       {
         proverka1 = true;
-        one = 0;
-        if(two == 3)
+        if(second[two] == 4)
         {
           proverka2 = true;
-          two = 3;
-          if(three == 7)
+          if(third[three] == 8)
           {
             proverka3 = true;
-            three = 7;
-            if(four == 7)
+            if(foured[four] == 8)
             {
               proverka4 = true;
-              four = 7;
               RGB_color(0,255,0);
               servo1.write(0);
             }
@@ -72,7 +71,7 @@ void loop() {
   }
 
   
-  delay(1000);
+  delay(500);
 
   lcd.setCursor(0, 1);
   
@@ -80,19 +79,19 @@ void loop() {
   
   lcd.setCursor(0, 1);
   lcd.print("HackCode:");
-  lcd.print(first[one]);
+  if (proverka1 == false || first[one] == 1) lcd.print(first[one]);
   lcd.print(" ");
-  lcd.print(second[two]);
+  if (proverka2 == false || second[two] == 4) lcd.print(second[two]);
   lcd.print(" ");
-  lcd.print(third[three]);
+  if (proverka3 == false || third[three] == 8) lcd.print(third[three]);
   lcd.print(" ");
-  lcd.print(foured[four]);
+  if (proverka4 == false || foured[four] == 8) lcd.print(foured[four]);
 
 
-  if (proverka1 == false)one = random(0, 10); // генерация случайного числа от 0 до 9
-  if (proverka2 == false)two = random(0, 10); 
-  if (proverka3 == false)three = random(0, 10); 
-  if (proverka4 == false)four = random(0, 10);  
+  if (proverka1 == false) one = (one + 1) % 30; // инкрементируем и применяем остаток от деления
+  if (proverka2 == false) two = (two + 1) % 30; 
+  if (proverka3 == false) three = (three + 1) % 30; 
+  if (proverka4 == false) four = (four + 1) % 30;  
 }
 
 void RGB_color(int red_value, int green_value, int blue_value)
